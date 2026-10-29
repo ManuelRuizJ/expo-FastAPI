@@ -3,22 +3,10 @@ from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
+from app.schemas import Categoria, Proyecto, ProyectoIn
 
 app = FastAPI(title="Evaluación Expo Ibero")
 
-class Categoria(str, Enum):
-    software = "Software"
-    hardware = "Hardware"
-    social = "Social"
-    ia = "Inteligencia Artificial"
-
-class ProyectoIn(BaseModel):
-    nombre: str = Field(min_length=3, max_length=120)
-    equipo: list[str] = Field(min_length=1, max_length=5)
-    categoria: Categoria
-
-class Proyecto(ProyectoIn):
-    id: int
 
 # TODO: Cambiar despues s SQLMODEL
 proyectos: dict[int, Proyecto] = {}
