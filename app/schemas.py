@@ -1,6 +1,6 @@
 from enum import Enum
-from pydantic import BaseModel, Field
 
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Categoria(str, Enum):
@@ -9,13 +9,17 @@ class Categoria(str, Enum):
     social = "Social"
     ia = "Inteligencia Artificial"
 
+
 class ProyectoIn(BaseModel):
     nombre: str = Field(min_length=3, max_length=120)
     equipo: list[str] = Field(min_length=1, max_length=5)
     categoria: Categoria
 
+
 class Proyecto(ProyectoIn):
     id: int
+    model_config = ConfigDict(from_attributes=True)
+
 
 class EvaluacionIn(BaseModel):
     innovacion: int = Field(ge=1, le=5)
@@ -23,14 +27,17 @@ class EvaluacionIn(BaseModel):
     presentacion: int = Field(ge=1, le=5)
     general: int = Field(ge=1, le=5)
 
+
 class Evaluacion(EvaluacionIn):
     id: int
     proyecto_id: int
+    model_config = ConfigDict(from_attributes=True)
+
 
 class Resumen(BaseModel):
     proyecto_id: int
     total_evaluaciones: int
     innovacion: float | None
-    vabilidad: float | None
+    viabilidad: float | None
     presentacion: float | None
     general: float | None
