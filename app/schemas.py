@@ -18,10 +18,11 @@ class Proyecto(ProyectoIn):
     id: int
 
 class EvaluacionIn(BaseModel):
+    evaluador: str = Field(min_length=2, max_length=80)
     innovacion: int = Field(ge=1, le=5)
     viabilidad: int = Field(ge=1, le=5)
     presentacion: int = Field(ge=1, le=5)
-    general: int = Field(ge=1, le=5)
+    comentarios: str | None = Field(default=None, max_length=300)
 
 class Evaluacion(EvaluacionIn):
     id: int
@@ -31,6 +32,6 @@ class Resumen(BaseModel):
     proyecto_id: int
     total_evaluaciones: int
     innovacion: float | None
-    vabilidad: float | None
+    viabilidad: float | None
     presentacion: float | None
     general: float | None

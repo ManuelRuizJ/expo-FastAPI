@@ -1,13 +1,24 @@
-from fastapi import HTTPException
+from typing import Annotated
 
-from app.repository import repositorio
-from app.schemas import Proyecto
+from fastapi import Depends, HTTPException
 
-def buscar_proyecto(proyecto_id: int) -> Proyecto:
+from app.database import SessionDep
+from app.models import ProyectoDB
+from app.repository_sql import RepositorySQL
+
+
+def get_repositorio(session: SessionDep) -> RepositorySQL:
+    return RepositorySQL(session)
+
+
+RepositorioDep = Annotated[RepositorySQL, Depends(get_repositorio)]
+
+
+def buscar_proyecto(proyecto_id: int, repositorio: RepositorioDep) -> ProyectoDB:
     proyecto = repositorio.obtener_proyecto(proyecto_id)
     if proyecto is None:
         raise HTTPException(status_code=404, detail="Proyecto no encontrado")
     return proyecto
 
 
-# TODO: falta algo aqui para que funcione, se debe modificar dependencies y repository_sql, no se esta guardando dentro de la db?, ya me paso repository_sql.py
+ProyectoDep = Annotated[ProyectoDB, Depends(buscar_proyecto)]

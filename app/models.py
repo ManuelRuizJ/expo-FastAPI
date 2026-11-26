@@ -11,12 +11,12 @@ class ProyectoDB(SQLModel, table=True):
     equipo: list[str] = Field(sa_column=Column(JSON, nullable=False))
     categoria : Categoria
 
-    evaluaciones: list["EvaluacionesDB"] = Relationship(
+    evaluaciones: list["EvaluacionDB"] = Relationship(
         back_populates="proyecto", cascade_delete=True
     )
 
 
-class EvaluacionesDB(SQLModel, table=True):
+class EvaluacionDB(SQLModel, table=True):
     __tablename__ = "evaluaciones"
 
     id: int | None = Field(default=None, primary_key=True)
